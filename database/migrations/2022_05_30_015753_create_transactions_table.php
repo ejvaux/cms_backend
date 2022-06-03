@@ -17,11 +17,11 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('part_number')->index();
             $table->integer('quantity');
-            $table->unsignedInteger('requestor_id');
-            $table->unsignedInteger('station_id')->nullable();
-            $table->unsignedInteger('transaction_type_id');
-            $table->unsignedInteger('location_id');
-            $table->unsignedInteger('shift_id');
+            $table->string('requestor');
+            $table->unsignedBigInteger('station_id')->nullable();
+            $table->unsignedBigInteger('transaction_type_id');
+            $table->unsignedBigInteger('location_id');
+            $table->unsignedBigInteger('shift_id');
             $table->string('remarks')->nullable();
             $table->string('user_id');
             $table->timestamps();
