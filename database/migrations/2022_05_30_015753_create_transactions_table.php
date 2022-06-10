@@ -24,6 +24,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('shift_id');
             $table->string('remarks')->nullable();
             $table->string('user_id');
+            $table->unsignedBigInteger('department_id');
             $table->timestamps();
         });
     }

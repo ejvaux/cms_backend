@@ -28,6 +28,7 @@ class CreateItemsTable extends Migration
             $table->unsignedInteger('max')->nullable();
             $table->string('lead_time')->nullable();
             $table->binary('image')->nullable();
+            $table->unsignedBigInteger('department_id');
             $table->timestamps();
         });
     }
