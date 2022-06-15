@@ -23,11 +23,12 @@ class AddForeignKeyConstraints extends Migration
             $table->foreign('department_id')->references('id')->on('departments');
         });
         Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('station_id')->references('id')->on('stations');
             $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
             $table->foreign('location_id')->references('id')->on('locations');
             $table->foreign('shift_id')->references('id')->on('shifts');
-            $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreign('requestor_id')->references('id')->on('requestors');
         });
     }
 
@@ -48,11 +49,12 @@ class AddForeignKeyConstraints extends Migration
             $table->dropForeign(['department_id']);
         });
         Schema::table('transactions', function (Blueprint $table) {
+            $table->dropForeign(['item_id']);
             $table->dropForeign(['station_id']);
             $table->dropForeign(['transaction_type_id']);
             $table->dropForeign(['location_id']);
             $table->dropForeign(['shift_id']);
-            $table->dropForeign(['department_id']);
+            $table->dropForeign(['requestor_id']);
         });
     }
 }

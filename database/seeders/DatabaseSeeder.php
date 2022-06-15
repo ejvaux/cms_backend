@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             UnitsTableSeeder::class,
 
             VendorsTableSeeder::class,
+            DepartmentsTableSeeder::class,
         ]);
     }
 }

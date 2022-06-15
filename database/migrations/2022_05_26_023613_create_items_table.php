@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('part_number')->unique()->index();
+            $table->string('part_number');
             $table->string('chinese_name')->nullable();
             $table->string('description');
             $table->unsignedBigInteger('category_id')->nullable();
@@ -30,6 +30,7 @@ class CreateItemsTable extends Migration
             $table->binary('image')->nullable();
             $table->unsignedBigInteger('department_id');
             $table->timestamps();
+            $table->unique(['part_number', 'department_id']);
         });
     }
 
