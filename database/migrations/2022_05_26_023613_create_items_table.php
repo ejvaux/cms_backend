@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->string('description');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('vendor_id')->nullable();
-            $table->unsignedBigInteger('allocation_id')->nullable();
+            $table->string('allocation')->nullable();
             $table->unsignedBigInteger('item_type_id')->nullable();
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('item_location_id')->nullable();
@@ -29,8 +29,9 @@ class CreateItemsTable extends Migration
             $table->string('lead_time')->nullable();
             $table->binary('image')->nullable();
             $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('site_id');
             $table->timestamps();
-            $table->unique(['part_number', 'department_id']);
+            $table->unique(['part_number', 'department_id', 'site_id']);
         });
     }
 

@@ -16,7 +16,10 @@ class TransactionTypesTableSeeder extends Seeder
     {
         $names = [
             'ISSUANCE',
-            'RECEIVED'
+            'RECEIVING',
+            'BORROW',
+            'RETURN',
+            'OTHERS'
         ];
         foreach ($names as $value) {
             DB::table('transaction_types')->insert([

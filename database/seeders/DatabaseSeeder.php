@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
 
             VendorsTableSeeder::class,
             DepartmentsTableSeeder::class,
+            SitesTableSeeder::class,
+            RequestorsTableSeeder::class,
         ]);
     }
 }
