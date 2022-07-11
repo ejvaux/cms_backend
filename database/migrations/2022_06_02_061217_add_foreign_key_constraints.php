@@ -23,12 +23,13 @@ class AddForeignKeyConstraints extends Migration
             $table->foreign('site_id')->references('id')->on('sites');
         });
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('requested_by')->references('id')->on('requestors');
             $table->foreign('station_id')->references('id')->on('stations');
             $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
             $table->foreign('location_id')->references('id')->on('locations');
             $table->foreign('shift_id')->references('id')->on('shifts');
-            $table->foreign('requestor_id')->references('id')->on('requestors');
+            $table->foreign('received_by')->references('id')->on('requestors');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
@@ -49,12 +50,13 @@ class AddForeignKeyConstraints extends Migration
             $table->dropForeign(['site_id']);
         });
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropForeign(['item_id']);
+            $table->dropForeign(['requested_by']);
             $table->dropForeign(['station_id']);
             $table->dropForeign(['transaction_type_id']);
             $table->dropForeign(['location_id']);
             $table->dropForeign(['shift_id']);
-            $table->dropForeign(['requestor_id']);
+            $table->dropForeign(['received_by']);
+            $table->dropForeign(['department_id']);
         });
     }
 }

@@ -16,6 +16,7 @@ class CreateRequestorsTable extends Migration
         Schema::create('requestors', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('code');
         });
     }
 

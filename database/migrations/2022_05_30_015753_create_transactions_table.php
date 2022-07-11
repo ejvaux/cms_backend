@@ -15,15 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('item_id')->index();
-            $table->integer('quantity');
-            $table->unsignedBigInteger('requestor_id');
+            $table->string('transaction_number');
+            $table->unsignedBigInteger('requested_by');
             $table->unsignedBigInteger('station_id')->nullable();
             $table->unsignedBigInteger('transaction_type_id');
             $table->unsignedBigInteger('location_id');
             $table->unsignedBigInteger('shift_id');
-            $table->string('remarks')->nullable();
-            $table->string('user_id');
+            $table->string('approved_by');
+            $table->unsignedBigInteger('received_by');
+            $table->string('updated_by');
+            $table->unsignedBigInteger('department_id');
             $table->timestamps();
         });
     }
