@@ -31,9 +31,8 @@ class CreateStocksTable extends Migration
      */
     public function down()
     {
-        Schema::table('stocks', function (Blueprint $table) {
-            $table->dropForeign(['item_id']);
-        });
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('stocks');
+        Schema::enableForeignKeyConstraints();
     }
 }

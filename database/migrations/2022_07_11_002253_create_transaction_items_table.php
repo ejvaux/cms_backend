@@ -17,6 +17,7 @@ class CreateTransactionItemsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('item_id');
+            $table->integer('quantity');
             $table->string('remarks');
             $table->timestamp('updated_at');
         });
@@ -33,10 +34,8 @@ class CreateTransactionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transaction_items', function (Blueprint $table) {
-            $table->dropForeign(['transaction_id']);
-            $table->dropForeign(['item_id']);
-        });
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('transaction_items');
+        Schema::enableForeignKeyConstraints();
     }
 }

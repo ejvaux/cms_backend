@@ -21,7 +21,8 @@ class SitesTableSeeder extends Seeder
         ];
         foreach ($names as $name) {
             DB::table('sites')->insert([
-                'name' => $name
+                'name' => $name,
+                'initial' => substr($name,0,1)
             ]);
         }
     }

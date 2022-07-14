@@ -28,8 +28,8 @@ class AddForeignKeyConstraints extends Migration
             $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
             $table->foreign('location_id')->references('id')->on('locations');
             $table->foreign('shift_id')->references('id')->on('shifts');
-            $table->foreign('received_by')->references('id')->on('requestors');
             $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreign('site_id')->references('id')->on('sites');
         });
     }
 
