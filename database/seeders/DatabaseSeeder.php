@@ -18,21 +18,22 @@ class DatabaseSeeder extends Seeder
             AllocationsTableSeeder::class,
             CategoriesTableSeeder::class,
             ItemLocationsTableSeeder::class,
-
-
             ItemTypesTableSeeder::class,
             LocationsTableSeeder::class,
             ShiftsTableSeeder::class,
-
-
             StationsTableSeeder::class,
-            TransactionTypesTableSeeder::class,
             UnitsTableSeeder::class,
-
             VendorsTableSeeder::class,
             DepartmentsTableSeeder::class,
             SitesTableSeeder::class,
             RequestorsTableSeeder::class,
+            WorkflowLevelTypeTableSeeder::class,
+            WorkflowStateTypeTableSeeder::class,
+            WorkflowStateHierarchyTableSeeder::class,
+            WorkflowStateContextTableSeeder::class,
+            WorkflowStateOptionTableSeeder::class,
+            WorkflowStateRoleTableSeeder::class,
+            StockUpdateSettingsTableSeeder::class,
         ]);
     }
 }

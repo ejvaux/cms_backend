@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionTypesTable extends Migration
+class CreateWorkflowStateTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateTransactionTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_types', function (Blueprint $table) {
+        Schema::create('workflow_state_type', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->unsignedBigInteger('workflow_level_type_id');
+            $table->string('type_key');
         });
     }
 
@@ -26,6 +27,6 @@ class CreateTransactionTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_types');
+        Schema::dropIfExists('workflow_state_type');
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RequestorsTableSeeder extends Seeder
 {
@@ -15,12 +16,24 @@ class RequestorsTableSeeder extends Seeder
     public function run()
     {
         $names = [
-            'John Doe',
-            'Juan Dela Cruz'
+            [
+                'emp' => 'WAREHOUSE',
+                'name' => 'Warehouse'
+            ],
+            //[
+            //    'emp' => 'D000001',
+            //    'name' => 'John Doe'
+            //],
+            //[
+            //    'emp' => 'D000002',
+            //    'name' => 'Juan Dela Cruz'
+            //]
         ];
         foreach ($names as $name) {
             DB::table('requestors')->insert([
-                'name' => $name
+                'employee_number' => $name['emp'],
+                'name' => $name['name'],
+                //'code' => Hash::make($name['emp'])
             ]);
         }
     }

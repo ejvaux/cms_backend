@@ -15,27 +15,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_number');
+            $table->string('transaction_number')->unique();
             $table->unsignedBigInteger('requested_by');
+            $table->unsignedBigInteger('receiver')->nullable();
             $table->unsignedBigInteger('station_id')->nullable();
-            $table->unsignedBigInteger('transaction_type_id');
             $table->unsignedBigInteger('location_id');
             $table->unsignedBigInteger('shift_id');
-            $table->string('approved_by');
-            $table->string('updated_by');
+            $table->string('updated_by')->nullable();
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('site_id');
+            $table->unsignedBigInteger('transaction_type_id');
             $table->timestamps();
-        });
-
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign('requested_by')->references('id')->on('requestors');
-            $table->foreign('station_id')->references('id')->on('stations');
-            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
-            $table->foreign('location_id')->references('id')->on('locations');
-            $table->foreign('shift_id')->references('id')->on('shifts');
-            $table->foreign('department_id')->references('id')->on('departments');
-            $table->foreign('site_id')->references('id')->on('sites');
         });
     }
 
@@ -46,8 +36,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('transactions');
-        Schema::enableForeignKeyConstraints();
     }
 }

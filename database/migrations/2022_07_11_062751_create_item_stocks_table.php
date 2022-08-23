@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStocksTable extends Migration
+class CreateItemStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('stocks', function (Blueprint $table) {
+        Schema::create('item_stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
             $table->integer('quantity');
             $table->timestamp('updated_at');
-        });
-        Schema::table('stocks', function (Blueprint $table) {
-            $table->foreign('item_id')->references('id')->on('items');
         });
     }
 
@@ -31,8 +28,6 @@ class CreateStocksTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('stocks');
-        Schema::enableForeignKeyConstraints();
+        Schema::dropIfExists('item_stocks');
     }
 }
