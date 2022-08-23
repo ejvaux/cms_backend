@@ -33,7 +33,7 @@ class RequestorsTableSeeder extends Seeder
             DB::table('requestors')->insert([
                 'employee_number' => $name['emp'],
                 'name' => $name['name'],
-                //'code' => Hash::make($name['emp'])
+                'code' => md5($name['emp'])
             ]);
         }
     }
