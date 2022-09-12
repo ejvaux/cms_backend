@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriceStatusColumnItemsTable extends Migration
+class AddGroupColumnItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddPriceStatusColumnItemsTable extends Migration
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->string('price')->nullable()->after('max');
-            $table->string('status')->nullable()->after('site_id');
+            $table->unsignedBigInteger('group_id')->nullable();
         });
     }
 
@@ -27,7 +26,7 @@ class AddPriceStatusColumnItemsTable extends Migration
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->dropColumn(['price', 'status']);
+            $table->dropColumn(['group_id']);
         });
     }
 }
