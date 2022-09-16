@@ -10,6 +10,8 @@ use App\Models\Unit;
 use App\Models\ItemLocation;
 use App\Models\Department;
 use App\Models\Site;
+use App\Models\ItemGroup;
+use App\Models\TransactionItem;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -19,8 +21,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Row;
+use Maatwebsite\Excel\Concerns\OnEachRow;
 
-class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar
+class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
 {
     use Importable;
 
@@ -31,6 +35,7 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar
     */
     public function model(array $row)
     {
+        $group = ItemGroup::where('name',$row['group'])->first();
         $category = Category::where('name',$row['category'])->first();
         $vendor = Vendor::where('name',$row['vendor'])->first();
         $item_type = ItemType::where('name',$row['item_type'])->first();
@@ -43,21 +48,46 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar
             'part_number' => $row['part_number'],
             'chinese_name' => $row['chinese_name'],
             'description' => $row['description'],
-            'category_id' => $category? $category->id : null,
-            'vendor_id' => $vendor? $vendor->id : null,
+            'group_id' => $group->id,
+            'category_id' => $row['category']? $category->id : null,
+            'vendor_id' => $row['vendor']? $vendor->id : null,
             'allocation' => $row['allocation'],
-            'item_type_id' => $item_type? $item_type->id : null,
-            'unit_id' => $unit? $unit->id : null,
-            'item_location_id' => $item_location? $item_location->id : null,
+            'item_type_id' => $row['item_type']? $item_type->id : null,
+            'unit_id' => $unit->id,
+            'item_location_id' => $row['item_location']? $item_location->id : null,
             'min' => $row['min'],
             'max' => $row['max'],
             'lead_time' => $row['lead_time'],
-            'department_id' => $department? $department->id : null,
-            'site_id' => $site? $site->id : null,
+            'department_id' => $department->id,
+            'site_id' => $site->id,
             'price' => $row['price'],
-            'status' => $row['status'].$myFileName,
+            'status' => $row['status'],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+    }
+
+    public function onRow(Row $row)
+    {
+        $row = $row->toArray();
+
+        if($row['stocks'] > 0){
+            //Get department
+            $department = Department::where('name',$row['department'])->first();
+
+            //Get site
+            $site = Site::where('initial',$row['site'])->first();
+
+            //Get item
+            $item = Item::where('part_number',$row['part_number'])->where('department_id',$department->id)->where('site_id',$site->id)->first();
+
+            //Insert to transaction item
+            $ti = new TransactionItem;
+            $ti->transaction_id = 1;
+            $ti->item_id = $item->id;
+            $ti->quantity = $row['stocks'];
+            $ti->remarks = 'Initial data';
+            $ti->save();
+        }
     }
 }

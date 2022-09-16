@@ -16,7 +16,8 @@ class CreateStockUpdateSettingsTable extends Migration
         Schema::create('stock_update_settings', function (Blueprint $table) {
             $table->id();
             $table->string('operation');
-            $table->unsignedBigInteger('state_context_id');
+            $table->unsignedBigInteger('transaction_type_id')->nullable();
+            $table->unsignedBigInteger('state_context_id')->nullable();
         });
     }
 

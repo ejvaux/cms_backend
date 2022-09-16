@@ -18,6 +18,7 @@ class Item extends Model
         'part_number',
         'chinese_name',
         'description',
+        'group_id',
         'category_id',
         'vendor_id',
         'allocation',

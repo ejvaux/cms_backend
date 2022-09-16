@@ -15,7 +15,7 @@ class ItemTypesTableSeeder extends Seeder
     public function run()
     {
         $names = [
-            'Pnuematic',
+            'Pneumatic',
             'Spare',
             'Test Spare'
         ];

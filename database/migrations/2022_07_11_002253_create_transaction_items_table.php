@@ -17,7 +17,7 @@ class CreateTransactionItemsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('item_id');
-            $table->integer('quantity');
+            $table->double('quantity',11,2);
             $table->string('remarks')->nullable();
             $table->timestamp('updated_at');
         });

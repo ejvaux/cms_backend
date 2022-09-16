@@ -17,7 +17,6 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('transaction_number')->unique();
             $table->unsignedBigInteger('requested_by');
-            $table->unsignedBigInteger('receiver')->nullable();
             $table->unsignedBigInteger('station_id')->nullable();
             $table->unsignedBigInteger('location_id');
             $table->unsignedBigInteger('shift_id');

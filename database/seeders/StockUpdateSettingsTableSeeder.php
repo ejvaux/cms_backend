@@ -42,5 +42,16 @@ class StockUpdateSettingsTableSeeder extends Seeder
                 'state_context_id' => $context
             ]);
         }
+
+        $transactions = [
+            '1',
+            '2'
+        ];
+        foreach ($transactions as $transaction) {
+            DB::table('stock_update_settings')->insert([
+                'operation' => '-',
+                'transaction_type_id' => $transaction
+            ]);
+        }
     }
 }

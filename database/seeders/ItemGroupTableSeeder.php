@@ -18,7 +18,7 @@ class ItemGroupTableSeeder extends Seeder
             'name' => 'Consumables',
         ]);
         DB::table('item_groups')->insert([
-            'name' => 'Spare Parts',
+            'name' => 'Spare parts',
         ]);
     }
 }
