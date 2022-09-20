@@ -108,6 +108,14 @@ class WorkflowStateContextTableSeeder extends Seeder
                 'state_type_id' => '4',
                 'state_hierarchy_id' => '20'
             ],
+
+            // *******  CHANGES STARTS HERE
+
+            // Borrow transaction - Added RETURN_RECEIVE
+            [
+                'state_type_id' => '2',
+                'state_hierarchy_id' => '15'
+            ],
         ];
 
         foreach ($states as $state) {

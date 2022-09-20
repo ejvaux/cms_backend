@@ -71,7 +71,7 @@ class WorkflowStateOptionTableSeeder extends Seeder
             ],
             [
                 'state_context_id' => '11',
-                'state_type_id' => '15'
+                'state_type_id' => '12' //Change from TRANSACTION_CLOSED, 15
             ],
             [
                 'state_context_id' => '12',
@@ -141,6 +141,14 @@ class WorkflowStateOptionTableSeeder extends Seeder
             ],
             [
                 'state_context_id' => '22',
+                'state_type_id' => '15'
+            ],
+
+            // *******  CHANGES STARTS HERE
+
+            // Borrow transaction - Added RETURN_RECEIVE
+            [
+                'state_context_id' => '23',
                 'state_type_id' => '15'
             ],
         ];

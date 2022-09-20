@@ -22,6 +22,7 @@ class StockUpdateSettingsTableSeeder extends Seeder
             '12',
             '13',
             '17',
+            '23',
         ];
         foreach ($contexts as $context) {
             DB::table('stock_update_settings')->insert([
