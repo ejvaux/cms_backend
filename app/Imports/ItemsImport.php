@@ -38,9 +38,9 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
         $group = ItemGroup::where('name',$row['group'])->first();
         $category = Category::where('name',$row['category'])->first();
         $vendor = Vendor::where('name',$row['vendor'])->first();
-        $item_type = ItemType::where('name',$row['item_type'])->first();
+        $item_type = $row['item_type']? ItemType::firstOrCreate(['name' => $row['item_type']]) : null;
         $unit = Unit::where('name',$row['unit'])->first();
-        $item_location = ItemLocation::where('name',$row['item_location'])->first();
+        $item_location = $row['item_location']? ItemLocation::firstOrCreate(['name' => $row['item_location']]) : null;
         $department = Department::where('name',$row['department'])->first();
         $site = Site::where('initial',$row['site'])->first();
 
@@ -52,10 +52,10 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             'category_id' => $row['category']? $category->id : null,
             'vendor_id' => $row['vendor']? $vendor->id : null,
             'allocation' => $row['allocation'],
-            'item_type_id' => $row['item_type']? $item_type->id : null,
+            'item_type_id' => $item_type? $item_type->id : null,
             'unit_id' => $unit->id,
-            'item_location_id' => $row['item_location']? $item_location->id : null,
-            'min' => $row['min'],
+            'item_location_id' => $item_location? $item_location->id : null,
+            'min' => $row['min']? $row['min'] : 0,
             'max' => $row['max'],
             'lead_time' => $row['lead_time'],
             'department_id' => $department->id,

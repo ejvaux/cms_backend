@@ -14,16 +14,32 @@ class UnitsTableSeeder extends Seeder
      */
     public function run()
     {
-        $names = [
-            'ML',
-            'PAIRS',
-            'PCS',
-            'ROLLS',
-            'METERS'
+        $units = [
+            [
+                'name' => 'ML',
+                'description' => 'Mililiter'
+            ],
+            [
+                'name' => 'PAIRS',
+                'description' => 'Pairs'
+            ],
+            [
+                'name' => 'PCS',
+                'description' => 'Pieces'
+            ],
+            [
+                'name' => 'ROLLS',
+                'description' => 'Rolls'
+            ],
+            [
+                'name' => 'METERS',
+                'description' => 'Meters'
+            ]
         ];
-        foreach ($names as $name) {
+        foreach ($units as $unit) {
             DB::table('units')->insert([
-                'name' => $name
+                'name' => $unit['name'],
+                'description' => $unit['description']
             ]);
         }
     }

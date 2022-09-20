@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AllocationsTableSeeder::class,
             CategoriesTableSeeder::class,
-            ItemLocationsTableSeeder::class,
-            ItemTypesTableSeeder::class,
+            //ItemLocationsTableSeeder::class,
+            //ItemTypesTableSeeder::class,
             LocationsTableSeeder::class,
             ShiftsTableSeeder::class,
             StationsTableSeeder::class,

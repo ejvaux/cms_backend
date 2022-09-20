@@ -17,7 +17,8 @@ class SitesTableSeeder extends Seeder
         $names = [
             'M-site',
             'P-site',
-            'Q-site'
+            'Q-site',
+            'R-site'
         ];
         foreach ($names as $name) {
             DB::table('sites')->insert([
