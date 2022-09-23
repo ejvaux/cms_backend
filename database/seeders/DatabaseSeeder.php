@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             WorkflowStateRoleTableSeeder::class,
             StockUpdateSettingsTableSeeder::class,
             ItemGroupTableSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }
