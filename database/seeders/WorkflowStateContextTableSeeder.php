@@ -116,6 +116,28 @@ class WorkflowStateContextTableSeeder extends Seeder
                 'state_type_id' => '2',
                 'state_hierarchy_id' => '15'
             ],
+
+            // Added EXPIRED all transactions
+            // ISSUANCE
+            [
+                'state_type_id' => '1',
+                'state_hierarchy_id' => '21'
+            ],
+            // BORROW
+            [
+                'state_type_id' => '2',
+                'state_hierarchy_id' => '21'
+            ],
+            // RECEIVING
+            [
+                'state_type_id' => '3',
+                'state_hierarchy_id' => '22'
+            ],
+            // RETURN
+            [
+                'state_type_id' => '4',
+                'state_hierarchy_id' => '23'
+            ],
         ];
 
         foreach ($states as $state) {

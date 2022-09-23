@@ -66,5 +66,20 @@ class WorkflowStateTypeTableSeeder extends Seeder
                 'type_key' => $outcome
             ]);
         }
+
+        // ADDED STATES
+        $states = [
+            // FOR EXPIRED TRANSACTIONS
+            [
+                'workflow_level_type_id' => '3',
+                'type_key' => 'EXPIRED'
+            ],
+        ];
+        foreach ($states as $state) {
+            DB::table('workflow_state_type')->insert([
+                'workflow_level_type_id' => $state['workflow_level_type_id'],
+                'type_key' => $state['type_key']
+            ]);
+        }
     }
 }

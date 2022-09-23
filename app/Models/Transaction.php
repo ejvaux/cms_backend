@@ -25,4 +25,19 @@ class Transaction extends Model
         'site_id',
         'transaction_type_id',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(TransactionItem::class);
+    }
+
+    public function all_history()
+    {
+        return $this->hasMany(TransactionHistory::class);
+    }
+
+    public function latest_history()
+    {
+        return $this->hasOne(TransactionHistory::class)->latestOfMany();
+    }
 }

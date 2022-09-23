@@ -103,10 +103,11 @@ class WorkflowStateOptionTableSeeder extends Seeder
                 'state_context_id' => '16',
                 'state_type_id' => '15'
             ],
+            /* REMOVED
             [
                 'state_context_id' => '17',
                 'state_type_id' => '15'
-            ],
+            ],*/
             [
                 'state_context_id' => '17',
                 'state_type_id' => '13'
@@ -151,6 +152,29 @@ class WorkflowStateOptionTableSeeder extends Seeder
                 'state_context_id' => '23',
                 'state_type_id' => '15'
             ],
+
+            // Added EXPIRED all transactions
+            // ISSUANCE
+            [
+                'state_context_id' => '24',
+                'state_type_id' => '15'
+            ],
+            // BORROW
+            [
+                'state_context_id' => '25',
+                'state_type_id' => '15'
+            ],
+            // RECEIVING
+            [
+                'state_context_id' => '26',
+                'state_type_id' => '15'
+            ],
+            // RETURN
+            [
+                'state_context_id' => '27',
+                'state_type_id' => '15'
+            ],
+
         ];
 
         foreach ($states as $state) {

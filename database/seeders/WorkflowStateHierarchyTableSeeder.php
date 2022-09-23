@@ -110,6 +110,21 @@ class WorkflowStateHierarchyTableSeeder extends Seeder
                 'state_type_parent_id' => '14',
                 'state_type_child_id' => '18'
             ],
+            // NEW ENTRY START HERE
+
+            // ADDED EXPIRED
+            [
+                'state_type_parent_id' => '5',
+                'state_type_child_id' => '24'
+            ],
+            [
+                'state_type_parent_id' => '9',
+                'state_type_child_id' => '24'
+            ],
+            [
+                'state_type_parent_id' => '10',
+                'state_type_child_id' => '24'
+            ],
         ];
         foreach ($states as $state) {
             DB::table('workflow_state_hierarchy')->insert([
