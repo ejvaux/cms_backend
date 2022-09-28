@@ -9,6 +9,7 @@ use App\Models\TransactionHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class InsertDb extends Command
 {
@@ -17,14 +18,14 @@ class InsertDb extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:db {--filename=}';
+    protected $signature = 'import:data {--filename=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Insert data to db';
+    protected $description = 'Import data to db';
 
     /**
      * Create a new command instance.
@@ -46,11 +47,18 @@ class InsertDb extends Command
         $this->output->title('Starting import');
         //Excel::import(new ItemsImport, $this->option('filename'));
 
+        // Check if file exists
+        $this->info('Checking import file');$this->newLine();
+        if(Storage::missing($this->option('filename'))){
+            $this->output->error('File not found!');
+            return null;
+        }
+
         //Get next transaction sequence
         $seq = DB::select("SELECT NEXT VALUE FOR dbo.Transaction_Number_seq as 'seq'");
 
         //Create transaction
-        $this->output->title('Creating transaction');
+        $this->info('Creating transaction');$this->newLine();
         $t = new Transaction;
         $t->transaction_number = 'M-'.Date('mdy').'-'.Str::padLeft(strval($seq[0]->seq), 4, '0');;
         $t->requested_by = 1;
@@ -61,24 +69,24 @@ class InsertDb extends Command
         $t->site_id = 1;
         $t->transaction_type_id = 3;
         $t->save();
-        $this->output->title('Done...');
+        $this->info('Done...');$this->newLine();
 
         //Inserting initial transaction history
-        $this->output->title('Creating transaction history');
+        $this->info('Creating transaction history');$this->newLine();
         $h = new TransactionHistory;
         $h->transaction_id = 1;
         $h->wf_state_type_state_id = 9;
         $h->agent = "System";
         $h->save();
-        $this->output->title('Done...');
+        $this->info('Done...');$this->newLine();
 
         //Import from file
-        $this->output->title('Importing from file');
+        $this->info('Importing from file');$this->newLine();
         (new ItemsImport)->withOutput($this->output)->import($this->option('filename'));
-        $this->output->title('Done...');
+        $this->info('Done...');$this->newLine();
 
         //Updating initial transaction history
-        $this->output->title('Closing the transaction');
+        $this->info('Closing the transaction');$this->newLine();
         $h2 = TransactionHistory::find($h->id);
         $h2->wf_state_type_outcome_id = 20;
         $h2->save();
@@ -89,7 +97,7 @@ class InsertDb extends Command
         $h3->wf_state_type_state_id = 15;
         $h3->agent = 'System';
         $h3->save();
-        $this->output->title('Done...');
+        $this->info('Done...');$this->newLine();
 
         $this->output->success('Import successful');
     }

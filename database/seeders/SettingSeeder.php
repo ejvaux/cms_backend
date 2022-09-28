@@ -16,7 +16,7 @@ class SettingSeeder extends Seeder
     {
         DB::table('settings')->insert([
             'name' => 'transaction_expiration',
-            'value' => '86400'
+            'value' => '1440'
         ]);
     }
 }

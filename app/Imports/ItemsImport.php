@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Concerns\WithProgressBar;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;
+use Illuminate\Support\Facades\Storage;
 
 class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
 {
@@ -35,6 +36,9 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
     */
     public function model(array $row)
     {
+        $image_exts = array('.jpg','.png');
+        $img_binary = null;
+
         $group = ItemGroup::where('name',$row['group'])->first();
         $category = Category::where('name',$row['category'])->first();
         $vendor = Vendor::where('name',$row['vendor'])->first();
@@ -43,6 +47,15 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
         $item_location = $row['item_location']? ItemLocation::firstOrCreate(['name' => $row['item_location']]) : null;
         $department = Department::where('name',$row['department'])->first();
         $site = Site::where('initial',$row['site'])->first();
+
+        foreach ($image_exts as $ext) {
+            if(Storage::exists('images/'.$row['part_number'].$ext)){
+                $datastring = file_get_contents(Storage::path('images/'.$row['part_number'].$ext));
+                $data = unpack("H*hex", $datastring);
+                $img_binary = $data['hex'];
+                break;
+            }
+        }
 
         return new Item([
             'part_number' => $row['part_number'],
@@ -64,6 +77,8 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             'status' => $row['status'],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'image' => \DB::raw('0x'.$img_binary),
+
         ]);
     }
 
