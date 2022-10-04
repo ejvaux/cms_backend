@@ -4,12 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Imports\ItemsImport;
+use App\Imports\RequestorsImport;
 use App\Models\Transaction;
 use App\Models\TransactionHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Requestor;
 
 class InsertDb extends Command
 {
@@ -18,7 +20,7 @@ class InsertDb extends Command
      *
      * @var string
      */
-    protected $signature = 'import:data {--filename=}';
+    protected $signature = 'import:data {table} {--filename=}';
 
     /**
      * The console command description.
@@ -53,7 +55,24 @@ class InsertDb extends Command
             $this->output->error('File not found!');
             return null;
         }
+        $table = $this->argument('table');
 
+        if (method_exists($this, $table)
+            && is_callable(array($this, $table)))
+        {
+            $this->$table();
+        }
+        else
+        {
+            $this->output->error('Table not found!');
+            return null;
+        }
+
+        $this->output->success('Import successful');
+    }
+
+    public function item()
+    {
         //Get next transaction sequence
         $seq = DB::select("SELECT NEXT VALUE FOR dbo.Transaction_Number_seq as 'seq'");
 
@@ -98,7 +117,13 @@ class InsertDb extends Command
         $h3->agent = 'System';
         $h3->save();
         $this->info('Done...');$this->newLine();
+    }
 
-        $this->output->success('Import successful');
+    public function requestor()
+    {
+        //Import from file
+        $this->info('Importing from file');$this->newLine();
+        (new RequestorsImport)->withOutput($this->output)->import($this->option('filename'));
+        $this->info('Done...');$this->newLine();
     }
 }

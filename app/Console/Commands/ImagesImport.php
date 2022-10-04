@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Item;
+use App\Models\ItemImage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -43,8 +44,13 @@ class ImagesImport extends Command
         $this->output->title('Starting import');
 
         $img_binary = null;
+        $missing_items = [];
 
         $images = Storage::files($this->option('path'));
+
+        $bar = $this->output->createProgressBar(count($images));
+
+        $bar->start();
 
         foreach ($images as $image_path)
         {
@@ -65,14 +71,27 @@ class ImagesImport extends Command
                 foreach ($items as $item)
                 {
                     //Update item, insert image binary
-                    Item::find($item->id)->update(['image' => \DB::raw('0x'.$img_binary)]);
+                    //Item::find($item->id)->update(['image' => \DB::raw('0x'.$img_binary)]);
+
+                    //Upsert image to item_image table
+                    ItemImage::updateOrCreate(
+                        ['item_id' => $item->id],
+                        ['image' => \DB::raw('0x'.$img_binary)]
+                    );
+                    $bar->advance();
                 }
-                $this->info($filename." uploaded.");
+                //$this->info($filename." uploaded.");
             }
             else
             {
-                $this->error($filename.". Item not found.");
+                //$this->error($filename.". Item not found.");
+                array_push($missing_items, $filename);
             }
+        }
+        $bar->finish();$this->newLine(2);
+
+        foreach ($missing_items as $miss) {
+            $this->error($miss.". Item not found.");
         }
         $this->newLine();
         $this->output->success('Import finished');

@@ -15,7 +15,7 @@ class AddPriceStatusColumnItemsTable extends Migration
     {
         Schema::table('items', function (Blueprint $table) {
             $table->string('price')->nullable()->after('max');
-            $table->string('status')->nullable()->after('site_id');
+            $table->unsignedBigInteger('status')->nullable()->after('site_id');
         });
     }
 

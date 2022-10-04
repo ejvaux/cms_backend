@@ -12,6 +12,8 @@ use App\Models\Department;
 use App\Models\Site;
 use App\Models\ItemGroup;
 use App\Models\TransactionItem;
+use App\Models\ItemStatus;
+use App\Models\Allocation;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -40,13 +42,20 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
         $img_binary = null;
 
         $group = ItemGroup::where('name',$row['group'])->first();
-        $category = Category::where('name',$row['category'])->first();
+        $category = $row['category']? Category::firstOrCreate(['name'=> $row['category']]) : null;
         $vendor = Vendor::where('name',$row['vendor'])->first();
         $item_type = $row['item_type']? ItemType::firstOrCreate(['name' => $row['item_type']]) : null;
         $unit = Unit::where('name',$row['unit'])->first();
         $item_location = $row['item_location']? ItemLocation::firstOrCreate(['name' => $row['item_location']]) : null;
+        $status = $row['status']? ItemStatus::where('name' , $row['status'])->first()->id : null;
         $department = Department::where('name',$row['department'])->first();
         $site = Site::where('initial',$row['site'])->first();
+        $allocations = $row['allocation']? explode(",",$row['allocation']) : null;
+        if ($allocations) {
+            foreach ($allocations as $allocation) {
+                Allocation::firstOrCreate(['name' => $allocation]);
+            }
+        }
 
         foreach ($image_exts as $ext) {
             if(Storage::exists('images/'.$row['part_number'].$ext)){
@@ -62,9 +71,9 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             'chinese_name' => $row['chinese_name'],
             'description' => $row['description'],
             'group_id' => $group->id,
-            'category_id' => $row['category']? $category->id : null,
+            'category_id' => $category? $category->id : null,
             'vendor_id' => $row['vendor']? $vendor->id : null,
-            'allocation' => $row['allocation'],
+            'allocation' => $allocations? implode(",",$allocations) : null,
             'item_type_id' => $item_type? $item_type->id : null,
             'unit_id' => $unit->id,
             'item_location_id' => $item_location? $item_location->id : null,
@@ -74,11 +83,10 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             'department_id' => $department->id,
             'site_id' => $site->id,
             'price' => $row['price'],
-            'status' => $row['status'],
+            'status' => $status,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'image' => \DB::raw('0x'.$img_binary),
-
         ]);
     }
 

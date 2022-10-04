@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGroupColumnItemsTable extends Migration
+class CreateItemImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddGroupColumnItemsTable extends Migration
      */
     public function up()
     {
-        Schema::table('items', function (Blueprint $table) {
-            $table->unsignedBigInteger('group_id');
+        Schema::create('item_images', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('item_id');
+            $table->binary('image');
         });
     }
 
@@ -25,8 +27,6 @@ class AddGroupColumnItemsTable extends Migration
      */
     public function down()
     {
-        Schema::table('items', function (Blueprint $table) {
-            $table->dropColumn(['group_id']);
-        });
+        Schema::dropIfExists('item_images');
     }
 }

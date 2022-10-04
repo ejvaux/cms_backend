@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             StockUpdateSettingsTableSeeder::class,
             ItemGroupTableSeeder::class,
             SettingSeeder::class,
+            ItemStatusSeeder::class,
         ]);
     }
 }

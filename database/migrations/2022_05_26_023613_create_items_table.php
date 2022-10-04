@@ -26,7 +26,7 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('item_location_id')->nullable();
             $table->unsignedInteger('min');
             $table->unsignedInteger('max')->nullable();
-            $table->string('lead_time')->nullable();
+            $table->integer('lead_time')->nullable();
             $table->binary('image')->nullable();
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('site_id');
