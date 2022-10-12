@@ -20,6 +20,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('transactions:expired')->everyMinute()
                 ->appendOutputTo(Storage::disk('logs')->path('expired_transactions.log'));
+
+        $schedule->command('database:backup')->daily();
     }
 
     /**

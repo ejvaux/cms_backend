@@ -73,57 +73,62 @@ class InsertDb extends Command
 
     public function item()
     {
-        //Get next transaction sequence
-        $seq = DB::select("SELECT NEXT VALUE FOR dbo.Transaction_Number_seq as 'seq'");
+        DB::transaction(function () {
+            //Get next transaction sequence
+            $seq = DB::select("SELECT NEXT VALUE FOR dbo.Transaction_Number_seq as 'seq'");
 
-        //Create transaction
-        $this->info('Creating transaction');$this->newLine();
-        $t = new Transaction;
-        $t->transaction_number = 'M-'.Date('mdy').'-'.Str::padLeft(strval($seq[0]->seq), 4, '0');;
-        $t->requested_by = 1;
-        $t->location_id = 1;
-        $t->shift_id = 1;
-        $t->updated_by = "System";
-        $t->department_id = 1;
-        $t->site_id = 1;
-        $t->transaction_type_id = 3;
-        $t->save();
-        $this->info('Done...');$this->newLine();
+            //Create transaction
+            $this->info('Creating transaction');$this->newLine();
+            $t = new Transaction;
+            $t->transaction_number = 'M-'.Date('mdy').'-'.Str::padLeft(strval($seq[0]->seq), 4, '0');;
+            $t->requested_by = 1;
+            $t->location_id = 1;
+            $t->shift_id = 1;
+            $t->updated_by = "System";
+            $t->department_id = 1;
+            $t->site_id = 1;
+            $t->transaction_type_id = 3;
+            $t->save();
+            $this->info('Done...');$this->newLine();
 
-        //Inserting initial transaction history
-        $this->info('Creating transaction history');$this->newLine();
-        $h = new TransactionHistory;
-        $h->transaction_id = 1;
-        $h->wf_state_type_state_id = 9;
-        $h->agent = "System";
-        $h->save();
-        $this->info('Done...');$this->newLine();
+            //Inserting initial transaction history
+            $this->info('Creating transaction history');$this->newLine();
+            $h = new TransactionHistory;
+            $h->transaction_id = $t->id;
+            $h->wf_state_type_state_id = 9;
+            $h->agent = "System";
+            $h->save();
+            $this->info('Done...');$this->newLine();
 
-        //Import from file
-        $this->info('Importing from file');$this->newLine();
-        (new ItemsImport)->withOutput($this->output)->import($this->option('filename'));
-        $this->info('Done...');$this->newLine();
+            //Import from file
+            $this->info('Importing from file');$this->newLine();
+            (new ItemsImport($t->id))->withOutput($this->output)->import($this->option('filename'));
+            $this->info('Done...');$this->newLine();
 
-        //Updating initial transaction history
-        $this->info('Closing the transaction');$this->newLine();
-        $h2 = TransactionHistory::find($h->id);
-        $h2->wf_state_type_outcome_id = 20;
-        $h2->save();
+            //Updating initial transaction history
+            $this->info('Closing the transaction');$this->newLine();
+            $h2 = TransactionHistory::find($h->id);
+            $h2->wf_state_type_outcome_id = 20;
+            $h2->save();
 
-        //Inserting closing transaction history
-        $h3 = new TransactionHistory;
-        $h3->transaction_id = 1;
-        $h3->wf_state_type_state_id = 15;
-        $h3->agent = 'System';
-        $h3->save();
-        $this->info('Done...');$this->newLine();
+            //Inserting closing transaction history
+            $h3 = new TransactionHistory;
+            $h3->transaction_id = $t->id;
+            $h3->wf_state_type_state_id = 15;
+            $h3->agent = 'System';
+            $h3->save();
+            $this->info('Done...');$this->newLine();
+        });
     }
 
     public function requestor()
     {
-        //Import from file
-        $this->info('Importing from file');$this->newLine();
-        (new RequestorsImport)->withOutput($this->output)->import($this->option('filename'));
-        $this->info('Done...');$this->newLine();
+        DB::transaction(function () {
+            //Import from file
+            $this->info('Importing from file');$this->newLine();
+            (new RequestorsImport)->withOutput($this->output)->import($this->option('filename'));
+            $this->info('Done...');$this->newLine();
+        });
+
     }
 }

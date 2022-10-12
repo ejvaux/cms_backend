@@ -31,6 +31,11 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
 {
     use Importable;
 
+    public function __construct(int $transaction_id)
+    {
+        $this->transaction_id = $transaction_id;
+    }
+
     /**
     * @param array $row
     *
@@ -57,14 +62,14 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             }
         }
 
-        foreach ($image_exts as $ext) {
+        /*foreach ($image_exts as $ext) {
             if(Storage::exists('images/'.$row['part_number'].$ext)){
                 $datastring = file_get_contents(Storage::path('images/'.$row['part_number'].$ext));
                 $data = unpack("H*hex", $datastring);
                 $img_binary = $data['hex'];
                 break;
             }
-        }
+        }*/
 
         return new Item([
             'part_number' => $row['part_number'],
@@ -86,7 +91,7 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
             'status' => $status,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'image' => \DB::raw('0x'.$img_binary),
+            //'image' => \DB::raw('0x'.$img_binary),
         ]);
     }
 
@@ -106,7 +111,7 @@ class ItemsImport implements ToModel, WithHeadingRow, WithProgressBar, OnEachRow
 
             //Insert to transaction item
             $ti = new TransactionItem;
-            $ti->transaction_id = 1;
+            $ti->transaction_id = $this->transaction_id;
             $ti->item_id = $item->id;
             $ti->quantity = $row['stocks'];
             $ti->remarks = 'Initial data';
